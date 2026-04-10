@@ -34,11 +34,14 @@ Dự án được tổ chức theo tiêu chuẩn Best Practices dành cho Ansibl
 ## 🚀 Hướng dẫn sử dụng (How to Run)
 
 **Bước 1: Đồng bộ mã nguồn và cấu hình IP mới nhất**
+
     git pull origin main
 
 **Bước 2: Kiểm tra khả năng thông mạng (Ping Test)**
+
     ansible routers -m ping
 
 **Bước 3: Thực thi kịch bản tự động hóa (Deploy/Run)**
 *(Ví dụ minh họa: Chạy Playbook tiến hành sao lưu toàn bộ cấu hình mạng)*
+
     ansible-playbook playbooks/backup_configs.yml
