@@ -1,0 +1,44 @@
+---
+- name: Configure Interfaces, Loopbacks, and OSPF
+  hosts: routers
+  gather_facts: false
+
+  tasks:
+    - name: 1. Đặt mô tả (Description) cho các cổng vật lý
+      cisco.ios.ios_interfaces:
+        config:
+          - name: FastEthernet0/0
+            description: "Connection to Peer Router"
+        state: merged
+
+    - name: 2. Tạo Loopback interface để test
+      cisco.ios.ios_interfaces:
+        config:
+          - name: Loopback0
+            description: "Loopback Interface for OSPF Testing"
+        state: merged
+
+    - name: 3. Gán IP cho cổng Loopback
+      cisco.ios.ios_l3_interfaces:
+        config:
+          - name: Loopback0
+            ipv4:
+              - address: "1.1.1.1/32" 
+        state: merged
+
+    - name: 4. Kích hoạt OSPF trên các cổng (Process ID 1, Area 0)
+      cisco.ios.ios_ospf_interfaces:
+        config:
+          - name: FastEthernet0/0
+            address_family:
+              - afi: ipv4
+                process:
+                  id: 1
+                  area_id: 0
+          - name: Loopback0
+            address_family:
+              - afi: ipv4
+                process:
+                  id: 1
+                  area_id: 0
+        state: merged
