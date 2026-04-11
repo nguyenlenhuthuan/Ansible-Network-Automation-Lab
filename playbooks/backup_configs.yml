@@ -1,0 +1,21 @@
+---
+- name: Backup Router Configurations
+  hosts: routers
+  gather_facts: no
+  connection: network_cli
+
+  tasks:
+    - name: 1. Lay cau hinh hien tai (Running Config)
+      cisco.ios.ios_command:
+        commands: show running-config
+      register: config_output
+
+    - name: 2. Luu cau hinh vao thu muc backups
+      copy:
+        content: "{{ config_output.stdout[0] }}"
+        dest: "{{ playbook_dir }}/../backups/{{ inventory_hostname }}_config.txt"
+      delegate_to: localhost
+
+    - name: 3. Thong bao hoan thanh
+      debug:
+        msg: "Da sao luu cau hinh cho {{ inventory_hostname }} thanh cong!"
