@@ -18,15 +18,15 @@
             description: "Loopback Interface for OSPF Testing"
         state: merged
 
-    - name: 3. Gán IP cho cổng Loopback
+    - name: 3. Gán IP Loopback (Tuỳ biến theo tên Router)
       cisco.ios.ios_l3_interfaces:
         config:
           - name: Loopback0
             ipv4:
-              - address: "1.1.1.1/32" 
+              - address: "{{ '1.1.1.1/32' if inventory_hostname == 'R1' else '2.2.2.2/32' }}" 
         state: merged
 
-    - name: 4. Kích hoạt OSPF trên các cổng (Process ID 1, Area 0)
+    - name: 4. Kích hoạt OSPF trên các cổng
       cisco.ios.ios_ospf_interfaces:
         config:
           - name: FastEthernet0/0
@@ -42,3 +42,9 @@
                   id: 1
                   area_id: 0
         state: merged
+
+    - name: 5. Fix lỗi 2WAY bằng cấu hình mạng Point-to-Point
+      cisco.ios.ios_config:
+        lines:
+          - ip ospf network point-to-point
+        parents: interface FastEthernet0/0
