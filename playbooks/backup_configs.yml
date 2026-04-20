@@ -1,4 +1,3 @@
----
 - name: Backup Router Configurations
   hosts: routers
   gather_facts: no
@@ -19,3 +18,4 @@
     - name: 3. Thong bao hoan thanh
       debug:
         msg: "Da sao luu cau hinh cho {{ inventory_hostname }} thanh cong!"
+

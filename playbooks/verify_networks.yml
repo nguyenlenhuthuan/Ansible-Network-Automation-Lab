@@ -1,0 +1,25 @@
+- name: Kiem tra trang thai mang va OSPF
+  hosts: routers
+  gather_facts: no
+  connection: network_cli
+
+  tasks:
+    - name: Kiem tra trang thai OSPF Neighbor
+      cisco.ios.ios_command:
+        commands: show ip ospf neighbor
+      register: ospf_status
+
+    - name: Kiem tra bang dinh tuyen
+      cisco.ios.ios_command:
+        commands: show ip route
+      register: route_status
+
+    - name: Hien thi OSPF Neighbors
+      debug:
+        msg: "{{ ospf_status.stdout[0] }}"
+
+    - name: Hien thi bang dinh tuyen
+      debug:
+        msg: "{{ route_status.stdout[0] }}"
+
+        
